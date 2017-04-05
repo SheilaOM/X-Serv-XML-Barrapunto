@@ -47,7 +47,6 @@ class myContentHandler(ContentHandler):
             self.theContent = self.theContent + chars
 
 # --- Main prog
-
 if len(sys.argv)<2:
     print("Usage: python xml-parser-barrapunto.py <document>")
     print("")
@@ -55,13 +54,11 @@ if len(sys.argv)<2:
     sys.exit(1)
 
 # Load parser and driver
-
 theParser = make_parser()
 theHandler = myContentHandler()
 theParser.setContentHandler(theHandler)
 
 # Ready, set, go!
-
 xmlFile = open(sys.argv[1],"r")
 theParser.parse(xmlFile)
 
