@@ -36,13 +36,10 @@ class myContentHandler(ContentHandler):
                 self.theContent = ""
             elif name == 'link':
                 self.link = self.theContent
-                print(self.titulo)
-
                 self.fich.write("\t\t\t<li><a href='" + self.link + "'>" + self.titulo + "</a></li>\n")
                 self.inContent = False
                 self.theContent = ""
         elif name == 'rdf:RDF':
-            print("JJJ")
             self.fich.write("\t\t</ul>\n\t</body>\n</html>")
 
     def characters (self, chars):
@@ -65,7 +62,7 @@ theParser.setContentHandler(theHandler)
 
 # Ready, set, go!
 
-xmlFile = open(sys.argv[1],"r")    #urllib que me de descriptor de string
+xmlFile = open(sys.argv[1],"r")
 theParser.parse(xmlFile)
 
 print("Parse complete")
