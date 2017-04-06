@@ -4,20 +4,15 @@ from xml.sax import make_parser
 import sys
 import os.path
 
+
 class myContentHandler(ContentHandler):
 
-    def __init__ (self):
-        if os.path.exists("barrapunto.html"):
-            self.fich = open("barrapunto.html", "w")
-        else:
-            self.fich = open("barrapunto.html", "a")
-
-        self.fich.write("<html>\n\t<head>\n\t\t<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\n\t</head>\n\t<body>\n\t\t<ul>\n")
+    def __init__(self):
         self.inItem = False
         self.inContent = False
         self.theContent = ""
 
-    def startElement (self, name, attrs):
+    def startElement(self, name, attrs):
         if name == 'item':
             self.inItem = True
         elif self.inItem:
@@ -26,7 +21,7 @@ class myContentHandler(ContentHandler):
             elif name == 'link':
                 self.inContent = True
 
-    def endElement (self, name):
+    def endElement(self, name):
         if name == 'item':
             self.inItem = False
         elif self.inItem:
@@ -36,18 +31,17 @@ class myContentHandler(ContentHandler):
                 self.theContent = ""
             elif name == 'link':
                 self.link = self.theContent
-                self.fich.write("\t\t\t<li><a href='" + self.link + "'>" + self.titulo + "</a></li>\n")
+                fich.write("\t\t\t<li><a href='" + self.link + "'>" +
+                           self.titulo + "</a></li>\n")
                 self.inContent = False
                 self.theContent = ""
-        elif name == 'rdf:RDF':
-            self.fich.write("\t\t</ul>\n\t</body>\n</html>")
 
-    def characters (self, chars):
+    def characters(self, chars):
         if self.inContent:
             self.theContent = self.theContent + chars
 
 # --- Main prog
-if len(sys.argv)<2:
+if len(sys.argv) < 2:
     print("Usage: python xml-parser-barrapunto.py <document>")
     print("")
     print(" <document>: file name of the document to parse")
@@ -59,7 +53,19 @@ theHandler = myContentHandler()
 theParser.setContentHandler(theHandler)
 
 # Ready, set, go!
-xmlFile = open(sys.argv[1],"r")
+global fich
+if os.path.exists("barrapunto.html"):
+    fich = open("barrapunto.html", "w")
+else:
+    fich = open("barrapunto.html", "a")
+
+fich.write("<html>\n\t<head>\n\t\t<meta http-equiv='Content-Type'" +
+           "content='text/html; charset=utf-8'/>" +
+           "\n\t</head>\n\t<body>\n\t\t<ul>\n")
+
+xmlFile = open(sys.argv[1], "r")
 theParser.parse(xmlFile)
+
+fich.write("\t\t</ul>\n\t</body>\n</html>")
 
 print("Parse complete")
