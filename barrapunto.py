@@ -3,6 +3,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
 import os.path
+import urllib.request
 
 
 class myContentHandler(ContentHandler):
@@ -41,12 +42,6 @@ class myContentHandler(ContentHandler):
             self.theContent = self.theContent + chars
 
 # --- Main prog
-if len(sys.argv) < 2:
-    print("Usage: python xml-parser-barrapunto.py <document>")
-    print("")
-    print(" <document>: file name of the document to parse")
-    sys.exit(1)
-
 # Load parser and driver
 theParser = make_parser()
 theHandler = myContentHandler()
@@ -63,7 +58,7 @@ fich.write("<html>\n\t<head>\n\t\t<meta http-equiv='Content-Type'" +
            "content='text/html; charset=utf-8'/>" +
            "\n\t</head>\n\t<body>\n\t\t<ul>\n")
 
-xmlFile = open(sys.argv[1], "r")
+xmlFile = urllib.request.urlopen("http://barrapunto.com/index.rss")
 theParser.parse(xmlFile)
 
 fich.write("\t\t</ul>\n\t</body>\n</html>")
